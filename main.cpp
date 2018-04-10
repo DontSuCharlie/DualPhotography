@@ -4,6 +4,9 @@
 #include "Shader.h"
 #include "ImageLoader.h"
 
+// stuff
+#include "Eigen/Dense"
+
 // Shader Source Code
 #include "default-vert.h"
 #include "default-frag.h"
