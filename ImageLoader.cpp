@@ -12,6 +12,7 @@
 
 Image loadImage(string file)
 {
+	// x = width, y = height, n = number of channels
 	int x, y, n;
 	int numComponents(0);
 	unsigned char* data = stbi_load(file.c_str(), &x, &y, &n, numComponents);
@@ -24,7 +25,7 @@ Image loadImage(string file)
 		// debug_imgLoader.log(to_string(data));
 	#endif
 
-	return Image((unsigned int)(x), (unsigned int)(y), data);
+	return Image((unsigned int)(x), (unsigned int)(y), (unsigned int)(n), data);
 }
 
 // vector<Image> loadAllImages(string directory)
