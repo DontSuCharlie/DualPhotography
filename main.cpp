@@ -92,6 +92,11 @@ int main(void)
 	GLuint experim1Tex;
 	glGenTextures(1, &experim1Tex);
 	glBindTexture(GL_TEXTURE_2D, experim1Tex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	// glTextureParameteri(experim1Tex, GL_MIN)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, orig1.getWidth(), orig1.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, orig1.getRaw());
 	glGenerateMipmap(GL_TEXTURE_2D);
 
