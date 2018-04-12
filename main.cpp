@@ -81,9 +81,13 @@ int main(void)
 		}
 	}
 	vector<Image> samples;
+	const int sampleANum = 1349;
+	const int sampleBNum = 1366;
+	const int sampleCNum = 1383;
+	const int sampleDNum = 1406;
 	for(int i = 0; i < 16; i++)
 	{
-		samples.push_back(loadImage("images/SampleA/IMAG" + to_string(1349 + i) + ".jpg"));
+		samples.push_back(loadImage("images/SampleC/IMAG" + to_string(sampleCNum + i) + ".jpg"));
 		// note to self: need to figure out how to deal with vector<Image> being able to assigned a const Image w/o a default constructor?
 	}
 	DualPhotography experim1;

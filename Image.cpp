@@ -41,7 +41,7 @@ Image::Image(unsigned int width, unsigned int height, unsigned int num_channels,
 // create a new empty image; does the memory allocation for you
 Image::Image(unsigned int width, unsigned int height, unsigned int num_channels)
 {
-	this->data = (unsigned char*) malloc(sizeof(unsigned char) * width * height * num_channels);
+	this->data = (unsigned char*) calloc(width * height * num_channels, sizeof(unsigned char));
 	this->width = width;
 	this->height = height;
 	this-> num_channels = num_channels;

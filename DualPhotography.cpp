@@ -18,6 +18,7 @@
 VectorXd DualPhotography::imageToCol(Image img)
 {
 	int len = img.getWidth() * img.getHeight();
+	printf("len = %d\n", len);
 	VectorXd output(len);
 	for(int i = 0; i < len; i++)
 	{
@@ -50,13 +51,15 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 	pDoublePrime = T_matrix * cDoublePrime;
 
 	// decode the 1D vector back to an image
-	Image final_img(width, height, 1);
+	Image final_img(width, height, 3);
 	for (int i = 0; i < pDoublePrime.size(); i++)
 	{
 		int x = i / height;
 		int y = i % height;
 		// the final_img.getWidth() is implicit, i.e. at the end, there should ONLY be w different values for x I think
 		final_img.set(0, x, y, pDoublePrime[i]);
+		final_img.set(1, x, y, pDoublePrime[i]);
+		final_img.set(2, x, y, pDoublePrime[i]);
 	}
 	return final_img;
 }
