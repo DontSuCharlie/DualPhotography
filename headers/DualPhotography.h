@@ -22,6 +22,6 @@ private:
 	// void loadSequence(string nomenclature, int num_imgs);
 
 	// converts an Image into a Vector. Does it on a row by row basis
-	Image imageToCol(Image img);
+	VectorXd imageToCol(Image img);
 
 };

@@ -19,6 +19,11 @@ unsigned char Image::at(unsigned int channel, unsigned int x, unsigned int y)
 	return *(this->data + (x * this->height + y) * this->num_channels + ((channel * sizeof(char))));
 }
 
+void Image::set(unsigned int channel, unsigned int x, unsigned int y, unsigned char val)
+{
+	*(this->data + (x * this->height + y) * this->num_channels + ((channel * sizeof(char)))) = val;
+}
+
 /*
 char Image::operator[](unsigned int x, unsigned int y)
 {

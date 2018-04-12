@@ -71,7 +71,6 @@ int main(void)
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 // testing Dual Photography
-	/*
 	// create the projector pattern (aka all white)
 	Image projectorPattern(4, 4, 1);
 	for(int i = 0; i < 4; i++)
@@ -81,10 +80,20 @@ int main(void)
 			projectorPattern.set(0, i, j, 255);			
 		}
 	}
-	DualPhotography sampleA;
-	sampleA.computeDualImage(images, projectorPattern);
+	vector<Image> samples;
+	for(int i = 0; i < 16; i++)
+	{
+		samples.push_back(loadImage("images/SampleA/IMAG" + to_string(1349 + i) + ".jpg"));
+		// note to self: need to figure out how to deal with vector<Image> being able to assigned a const Image w/o a default constructor?
+	}
+	DualPhotography experim1;
+	Image orig1 = experim1.computeDualImage(samples, projectorPattern);
 	// render images
-	*/
+	GLuint experim1Tex;
+	glGenTextures(1, &experim1Tex);
+	glBindTexture(GL_TEXTURE_2D, experim1Tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, orig1.getWidth(), orig1.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, orig1.getRaw());
+	glGenerateMipmap(GL_TEXTURE_2D);
 
 	while(!glfwWindowShouldClose(window))
 	{

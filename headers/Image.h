@@ -9,6 +9,7 @@ public:
 	unsigned int getWidth();
 	unsigned char* getRaw();
 	unsigned char at(unsigned int channel, unsigned int x, unsigned int y);
+	void set(unsigned int channel, unsigned int x, unsigned int y, unsigned char val);
 	// char operator[](unsigned int x, unsigned int y);
 	Image(unsigned int width, unsigned int height, unsigned int num_channels);
 	Image(unsigned int width, unsigned int height, unsigned int num_channels, unsigned char* data);

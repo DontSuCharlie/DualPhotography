@@ -1,7 +1,7 @@
 #Variable declarations
 COMPILER=g++
-CFLAGS=-c -std=c++11 -Iheaders -Ishaders
-SOURCES=main.cpp glad.c WindowUtilities.cpp Shader.cpp ImageLoader.cpp Image.cpp
+CFLAGS=-c -std=c++11 -Iheaders -Ishaders -DMINGW
+SOURCES=main.cpp glad.c WindowUtilities.cpp Shader.cpp ImageLoader.cpp Image.cpp DualPhotography.cpp
 #Camera.cpp GameObject.cpp GameComponent.cpp
 
 # $(SOURCES:.cpp=.o) is a Substitution Reference
