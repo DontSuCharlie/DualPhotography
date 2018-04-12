@@ -9,35 +9,9 @@ unsigned int Image::getWidth()
 	return this->width;
 }
 
-unsigned int Image::red(unsigned int x, unsigned int y)
+unsigned char Image::at(unsigned int channel, unsigned int x, unsigned int y)
 {
-	return ( this->data + ((x * this->height + y) * this->num_channels));
-}
-
-unsigned int Image::green(unsigned int x, unsigned int y)
-{
-	return ( this->data + ((x * this->height + y) * this->num_channels) + sizeof(char));	
-}
-
-unsigned int Image::blue(unsigned int x, unsigned int y)
-{
-	return ( this->data + ((x * this->height + y) * this->num_channels) + (2 * sizeof(char)));
-}
-
-unsigned int Image::alpha(unsigned int x, unsigned int y)
-{
-	if(this->num_channels < 4)
-	{
-		cerr << "The image doesn't have an alpha channel!" << endl;
-		return 0;
-	}
-	return ( this->data + ((x * this->height + y) * this->num_channels) + (3 * sizeof(char)));
-}
-
-unsigned int Image::at(unsigned int x, unsigned int y)
-{
-	vector<unsigned int> color(this->num_channels);
-	for(int i = 0; i < )
+	return *(this->data + (x * this->height + y) * this->num_channels + ((channel * sizeof(char))));
 }
 
 /*

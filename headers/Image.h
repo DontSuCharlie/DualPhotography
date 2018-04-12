@@ -6,11 +6,7 @@ class Image
 public:
 	unsigned int getHeight();
 	unsigned int getWidth();
-	unsigned int red(unsigned int x, unsigned int y);
-	unsigned int green(unsigned int x, unsigned int y);
-	unsigned int blue(unsigned int x, unsigned int y);
-	unsigned int alpha(unsigned int x, unsigned int y);
-	vector<unsigned int> at(unsigned int x, unsigned int y);
+	unsigned char at(unsigned int channel, unsigned int x, unsigned int y);
 	// char operator[](unsigned int x, unsigned int y);
 	Image(unsigned int width, unsigned int height, unsigned int num_channels, unsigned char* data);
 private:

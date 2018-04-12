@@ -11,11 +11,6 @@
 
 #include "DualPhotography.h"
 
-vector<Image> DualPhotography::generateProjectorPatterns(Vector2d wantedRes, Vector2d projectorRes)
-{
-
-}
-
 // row by row basis
 VectorXd DualPhotography::imageToCol(Image img)
 {
@@ -23,8 +18,9 @@ VectorXd DualPhotography::imageToCol(Image img)
 	VectorXd output(len);
 	for(int i = 0; i < len; i++)
 	{
-		output(i) = img
+		output(i) = img.at(0, i % img.getWidth(), i / img.getWidth());
 	}
+	return output;
 }
 
 Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPattern)
@@ -37,27 +33,28 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 	T_matrix.transposeInPlace();
 
 	VectorXd cDoublePrime; // the c'' vector
-	for (int x = 0; x < projectorPattern.getWidth(); x++)
+	int width = projectorPattern.getWidth();
+	int height = projectorPattern.getHeight();
+	for (int x = 0; x < width; x++)
 	{
-		for (int y = 0; y < projectorPattern.getHeight(); y++)
+		for (int y = 0; y < height; y++)
 		{
-			cDoublePrime[x * projectorPattern.getHeight() + y] = images[x * projectorPattern.getHeight() + y][x][y];
+			cDoublePrime(x * height + y) = images[x * height + y].red(x, y);
 		}
 	}
 	VectorXd pDoublePrime;// the p'' vector
 	pDoublePrime = T_matrix * cDoublePrime;
 
 	// decode the 1D vector back to an image
-
 	Image final_img;
-	final_img.getWidth() = projectorPattern.getWidth();
-	final_img.getHeight() = projectorPattern.getHeight();
+	final_img.getWidth() = width;
+	final_img.getHeight() = height;
 	for (int i = 0; i < pDoublePrime.length; i++)
 	{
-		int x = i / final_img.getHeight();
-		int y = i % final_img.getHeight();
+		int x = i / height;
+		int y = i % height;
 		// the final_img.getWidth() is implicit, i.e. at the end, there should ONLY be w different values for x I think
-		final_img[x][y] = pDoublePrime[i];
+		final_img.set(0, x,y) = pDoublePrime[i];
 	}
 	return final_img;
 }
