@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DualPhotography.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="headers\glm\detail\glm.cpp" />
     <ClCompile Include="Image.cpp" />

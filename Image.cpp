@@ -41,11 +41,14 @@ Image::Image(unsigned int width, unsigned int height, unsigned int num_channels,
 // create a new empty image; does the memory allocation for you
 Image::Image(unsigned int width, unsigned int height, unsigned int num_channels)
 {
-	unsigned char* data = (unsigned char*) malloc(sizeof(unsigned char) * width * height * num_channels);
-	Image(width, height, num_channels, data);
+	this->data = (unsigned char*) malloc(sizeof(unsigned char) * width * height * num_channels);
+	this->width = width;
+	this->height = height;
+	this-> num_channels = num_channels;
+	// Image(width, height, num_channels, data);
 }
 
 Image::~Image()
 {
-	free(this->data);
+	// free(this->data);
 }

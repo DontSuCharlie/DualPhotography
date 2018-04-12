@@ -253,6 +253,7 @@ template<typename Derived> class DenseBase
     {
       EIGEN_ONLY_USED_FOR_DEBUG(rows);
       EIGEN_ONLY_USED_FOR_DEBUG(cols);
+	  printf("rows = %d, this->rows = %d, cols = %d, this->cols = %d\n", rows, this->rows(), cols, this->cols());
       eigen_assert(rows == this->rows() && cols == this->cols()
                 && "DenseBase::resize() does not actually allow to resize.");
     }

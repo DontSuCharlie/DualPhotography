@@ -31,14 +31,14 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 	int num_imgs = images.size();
 	int width = projectorPattern.getWidth();
 	int height = projectorPattern.getHeight();
-	MatrixXd T_matrix(width * height, images[0].getWidth() * images[0].getHeight()); // the transport matrix
+	MatrixXd T_matrix(images[0].getWidth() * images[0].getHeight(), width * height); // the transport matrix
 	for (int i = 0; i < num_imgs; i++)
 	{
 		T_matrix.col(i) = imageToCol(images[i]);
 	}
 	T_matrix.transposeInPlace();
 
-	VectorXd cDoublePrime; // the c'' vector
+	VectorXd cDoublePrime(images[0].getWidth() * images[0].getHeight()); // the c'' vector
 	for (int x = 0; x < width; x++)
 	{
 		for (int y = 0; y < height; y++)
@@ -46,7 +46,7 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 			cDoublePrime(x * height + y) = images[x * height + y].at(0, x, y);
 		}
 	}
-	VectorXd pDoublePrime;// the p'' vector
+	VectorXd pDoublePrime(width * height);// the p'' vector
 	pDoublePrime = T_matrix * cDoublePrime;
 
 	// decode the 1D vector back to an image
