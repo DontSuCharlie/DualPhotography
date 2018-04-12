@@ -57,6 +57,22 @@ int main(void)
 	// testing Image
 	Image img = loadImage("images/test.jpg");
 
+
+// testing Dual Photography
+
+	// create the projector pattern (aka all white)
+	Image projectorPattern(4, 4, 1);
+	for(int i = 0; i < 4; i++)
+	{
+		for(int j = 0; j < 4 ; j++)
+		{
+			projectorPattern.set(0, i, j, 255);			
+		}
+	}
+	DualPhotography sampleA;
+	sampleA.computeDualImage(images, projectorPattern);
+	// render images
+
 	while(!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
