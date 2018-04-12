@@ -3,6 +3,7 @@
 #include "WindowUtilities.h"
 #include "Shader.h"
 #include "ImageLoader.h"
+#include "DualPhotography.h"
 	
 // Shader Source Code
 #include "default-vert.h"
@@ -31,10 +32,12 @@ int main(void)
 	glBindVertexArray(vao);
 
 	// load all the information needed to render stuff
-	float vertices[] = {-0.5f, -0.5f, 0.0f, 
-		0.5f, -0.5f, 0.0f, 
-		0.5f, 0.5f, 0.0f, 
-		-0.5f, 0.5f, 0.0f};
+	float vertices[] = {
+		// vertex position		// texture coords
+		-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,
+		0.5f, -0.5f, 0.0f,		1.0f, 0.0f,
+		0.5f, 0.5f, 0.0f,		1.0f, 1.0f, 
+		-0.5f, 0.5f, 0.0f,		0.0f, 1.0f};
 	unsigned int vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -47,19 +50,28 @@ int main(void)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
-	glEnableVertexAttribArray(0);
+	// vertex attribute pointer for the position
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0); // enables the attrib pointer, i.e. the shader can now access it, I think
+	// vertex attribute pointer for the texture coords
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	// glBindVertexArray(0);
 	Shader my_shader(vertexShaderSource, fragmentShaderSource, true);
 
 	// testing Image
-	Image img = loadImage("images/test.jpg");
+	Image img = loadImage("images/SampleA/IMAG1349.jpg");
+	
 
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.getWidth(), img.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img.getRaw());
+	glGenerateMipmap(GL_TEXTURE_2D);
 
 // testing Dual Photography
-
+	/*
 	// create the projector pattern (aka all white)
 	Image projectorPattern(4, 4, 1);
 	for(int i = 0; i < 4; i++)
@@ -72,6 +84,7 @@ int main(void)
 	DualPhotography sampleA;
 	sampleA.computeDualImage(images, projectorPattern);
 	// render images
+	*/
 
 	while(!glfwWindowShouldClose(window))
 	{

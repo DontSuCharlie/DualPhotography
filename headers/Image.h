@@ -1,14 +1,18 @@
 #pragma once
 #include <vector>
+#include <stdlib.h>
 
 class Image
 {
 public:
 	unsigned int getHeight();
 	unsigned int getWidth();
+	unsigned char* getRaw();
 	unsigned char at(unsigned int channel, unsigned int x, unsigned int y);
 	// char operator[](unsigned int x, unsigned int y);
+	Image(unsigned int width, unsigned int height, unsigned int num_channels);
 	Image(unsigned int width, unsigned int height, unsigned int num_channels, unsigned char* data);
+	~Image();
 private:
 	// the type of PNG given the following number of channels
 	const unsigned int GREY = 1;

@@ -2,7 +2,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #endif
 #include "ImageLoader.h"
-
+#include <stdio.h>
 #ifdef DEBUG
 	#include <string>
 	#include "Logger.h"
@@ -24,7 +24,10 @@ Image loadImage(string file)
 		debug_imgLoader.log(to_string(n));
 		// debug_imgLoader.log(to_string(data));
 	#endif
-
+	if (!data)
+	{
+		printf("ERROR: Unable to load %s\n", file);
+	}
 	return Image((unsigned int)(x), (unsigned int)(y), (unsigned int)(n), data);
 }
 
