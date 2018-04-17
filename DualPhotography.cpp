@@ -84,7 +84,7 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 		int y = i % height;
 		// the final_img.getWidth() is implicit, i.e. at the end, there should ONLY be w different values for x I think
 		pDoublePrime[i] = (pDoublePrime[i] - min) / (max - min) * 255.0f;
-		printf("Assigning (%d, %d) with %f\n", x, y, pDoublePrime[i]);
+		printf("Assigning (%d, %d) with %f\n", height - x - 1, y, pDoublePrime[i]);
 		/*if (pDoublePrime[i] < 128)
 		{
 			pDoublePrime[i] = 0;
@@ -95,9 +95,10 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 		}*/
 		// FOLLOWING THE RED CHANNEL TIP WAS BAD IDEA
 		// TOO LITTLE DIFFERENTIATION IN RED CHANNEL
-		final_img.set(0, x, y, pDoublePrime[i]);
-		final_img.set(1, x, y, pDoublePrime[i]);
-		final_img.set(2, x, y, pDoublePrime[i]);
+		// height - x - 1 instead of x bc it prints the original image upside down
+		final_img.set(0, height - x - 1, y, pDoublePrime[i]);
+		final_img.set(1, height - x - 1, y, pDoublePrime[i]);
+		final_img.set(2, height - x - 1, y, pDoublePrime[i]);
 	}
 	return final_img;
 }

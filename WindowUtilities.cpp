@@ -12,7 +12,7 @@ void windowResizeCallback(GLFWwindow* window, int width, int height)
 
 GLFWwindow* createMainWindow()
 {
-	int window_width{640}, window_height{640};
+	int window_width{1280}, window_height{1280};
 	// initialize GLFW
 	if(!glfwInit())
 	{
