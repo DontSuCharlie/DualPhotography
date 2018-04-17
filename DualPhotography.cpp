@@ -18,11 +18,11 @@
 VectorXd DualPhotography::imageToCol(Image img)
 {
 	int len = img.getWidth() * img.getHeight();
-	printf("len = %d\n", len);
 	VectorXd output(len);
 	for(int i = 0; i < len; i++)
 	{
-		output(i) = img.at(0, i % img.getWidth(), i / img.getWidth());
+		output(i) = img.at(2, i % img.getWidth(), i / img.getWidth());
+		// printf("output(%d) = %f\n", i, output(i));
 	}
 	return output;
 }
@@ -39,24 +39,62 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 	}
 	T_matrix.transposeInPlace();
 
-	VectorXd cDoublePrime(images[0].getWidth() * images[0].getHeight()); // the c'' vector
+	int cam_dim = images[0].getWidth() * images[0].getHeight();
+	VectorXd cDoublePrime(cam_dim); // the c'' vector
+	for (int i = 0; i < cam_dim; i++)
+	{
+		// int x = i / images[0].getHeight();
+		// int y = i % images[0].getHeight();
+		cDoublePrime(i) = 255.0f; //images[0].at(0, x, y);
+		// printf("at (%d, %d), ", x, y);
+		// printf("cDoublePrime = %f\n", cDoublePrime(i));
+	}
+	/*
 	for (int x = 0; x < width; x++)
 	{
 		for (int y = 0; y < height; y++)
 		{
+			// printf("i = %d, x = %d, y = %d\n", x * height + y, x, y);
 			cDoublePrime(x * height + y) = images[x * height + y].at(0, x, y);
+			printf("cDoublePrime = %f\n", cDoublePrime(x * height + y));
 		}
-	}
+	}*/
 	VectorXd pDoublePrime(width * height);// the p'' vector
 	pDoublePrime = T_matrix * cDoublePrime;
 
 	// decode the 1D vector back to an image
 	Image final_img(width, height, 3);
+
+	double max = -INFINITY;
+	double min = -max;
+	for (int i = 0; i < pDoublePrime.size(); i++)
+	{
+		if (pDoublePrime[i] > max)
+		{
+			max = pDoublePrime[i];
+		}
+		if (pDoublePrime[i] < min)
+		{
+			min = pDoublePrime[i];
+		}
+	}
 	for (int i = 0; i < pDoublePrime.size(); i++)
 	{
 		int x = i / height;
 		int y = i % height;
 		// the final_img.getWidth() is implicit, i.e. at the end, there should ONLY be w different values for x I think
+		pDoublePrime[i] = (pDoublePrime[i] - min) / (max - min) * 255.0f;
+		printf("Assigning (%d, %d) with %f\n", x, y, pDoublePrime[i]);
+		/*if (pDoublePrime[i] < 128)
+		{
+			pDoublePrime[i] = 0;
+		}
+		else
+		{
+			pDoublePrime[i] = 255;
+		}*/
+		// FOLLOWING THE RED CHANNEL TIP WAS BAD IDEA
+		// TOO LITTLE DIFFERENTIATION IN RED CHANNEL
 		final_img.set(0, x, y, pDoublePrime[i]);
 		final_img.set(1, x, y, pDoublePrime[i]);
 		final_img.set(2, x, y, pDoublePrime[i]);

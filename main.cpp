@@ -87,7 +87,7 @@ int main(void)
 	const int sampleDNum = 1406;
 	for(int i = 0; i < 16; i++)
 	{
-		samples.push_back(loadImage("images/SampleC/IMAG" + to_string(sampleCNum + i) + ".jpg"));
+		samples.push_back(loadImage("images/SampleD/IMAG" + to_string(sampleDNum + i) + ".jpg"));
 		// note to self: need to figure out how to deal with vector<Image> being able to assigned a const Image w/o a default constructor?
 	}
 	DualPhotography experim1;
@@ -107,6 +107,7 @@ int main(void)
 	while(!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
+		glClearColor(0.1f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glBindVertexArray(vao);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

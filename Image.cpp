@@ -16,7 +16,25 @@ unsigned char* Image::getRaw()
 
 unsigned char Image::at(unsigned int channel, unsigned int x, unsigned int y)
 {
+	/*
+	printf("Number of channels = %d\n", this->num_channels);
+	printf("heigth = %d\n", height);
+	printf("Size per channel = %d\n", sizeof(char));
+	printf("Channel requested = %d\n", channel);
+	printf("Pixel requested = (%d, %d)\n", x, y);
+	printf("Starting point = %p\n", this->data);
+	printf("Calculated = %p\n", (this->data + (x * this->height + y) * this->num_channels + ((channel * sizeof(char)))));
+	printf("start is at %p, x = %d, y = %d, calculated data is at %p\n", 
+		this->data,
+		x,
+		y,
+		this->data + (x * this->height + y) * this->num_channels + ((channel * sizeof(char))));*/
 	return *(this->data + (x * this->height + y) * this->num_channels + ((channel * sizeof(char))));
+	/*
+	unsigned int pos = (x * this->height) + y;
+	unsigned int offset = (pos * this->num_channels) + (channel * sizeof(unsigned char));
+	return *(this->data + offset);
+	*/
 }
 
 void Image::set(unsigned int channel, unsigned int x, unsigned int y, unsigned char val)
