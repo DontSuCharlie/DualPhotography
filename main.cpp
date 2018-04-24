@@ -18,6 +18,8 @@ Logger debug; // for printing to stdout and a log file at the same time
 
 #endif
 
+const int projectorRes = 4;
+
 int main(void)
 {
 	#ifdef DEBUG
@@ -72,12 +74,13 @@ int main(void)
 
 // testing Dual Photography
 	// create the projector pattern (aka all white)
-	Image projectorPattern(4, 4, 1);
-	for(int i = 0; i < 4; i++)
+	Image projectorPattern(projectorRes, projectorRes, 1);
+	Matrix<unsigned char, 3, 1> white(255, 255, 255);
+	for(int i = 0; i < projectorRes; i++)
 	{
-		for(int j = 0; j < 4 ; j++)
+		for(int j = 0; j < projectorRes ; j++)
 		{
-			projectorPattern.set(0, i, j, 255);			
+			projectorPattern.set(i, j, white);
 		}
 	}
 	vector<Image> samples;

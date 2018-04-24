@@ -103,7 +103,7 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 		pDoublePrimeG[i] = (pDoublePrimeG[i] - min[1]) / (max[1] - min[1]) * 255.0f;
 		pDoublePrimeB[i] = (pDoublePrimeB[i] - min[2]) / (max[2] - min[2]) * 255.0f;
 
-		Vector3d color(pDoublePrimeR[i], pDoublePrimeG[i], pDoublePrimeB[i]);
+		Matrix<unsigned char, 3, 1> color(pDoublePrimeR[i], pDoublePrimeG[i], pDoublePrimeB[i]);
 		final_img.set(height - x - 1, y, color);
 	}
 	return final_img;
