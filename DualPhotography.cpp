@@ -1,4 +1,3 @@
-
 // for compiling stb_image_write
 #ifndef STB_IMAGE_WRITE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -27,6 +26,7 @@ VectorXd DualPhotography::imageToCol(Image img)
 	return output;
 }
 
+
 Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPattern)
 {
 	int num_imgs = images.size();
@@ -43,28 +43,13 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 	VectorXd cDoublePrime(cam_dim); // the c'' vector
 	for (int i = 0; i < cam_dim; i++)
 	{
-		// int x = i / images[0].getHeight();
-		// int y = i % images[0].getHeight();
-		cDoublePrime(i) = 255.0f; //images[0].at(0, x, y);
-		// printf("at (%d, %d), ", x, y);
-		// printf("cDoublePrime = %f\n", cDoublePrime(i));
+		cDoublePrime(i) = 255.0f;
 	}
-	/*
-	for (int x = 0; x < width; x++)
-	{
-		for (int y = 0; y < height; y++)
-		{
-			// printf("i = %d, x = %d, y = %d\n", x * height + y, x, y);
-			cDoublePrime(x * height + y) = images[x * height + y].at(0, x, y);
-			printf("cDoublePrime = %f\n", cDoublePrime(x * height + y));
-		}
-	}*/
+
 	VectorXd pDoublePrime(width * height);// the p'' vector
 	pDoublePrime = T_matrix * cDoublePrime;
 
 	// decode the 1D vector back to an image
-	Image final_img(width, height, 3);
-
 	double max = -INFINITY;
 	double min = -max;
 	for (int i = 0; i < pDoublePrime.size(); i++)
@@ -78,6 +63,9 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 			min = pDoublePrime[i];
 		}
 	}
+
+	Image final_img(width, height, 3);
+
 	for (int i = 0; i < pDoublePrime.size(); i++)
 	{
 		int x = i / height;
@@ -85,16 +73,7 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 		// the final_img.getWidth() is implicit, i.e. at the end, there should ONLY be w different values for x I think
 		pDoublePrime[i] = (pDoublePrime[i] - min) / (max - min) * 255.0f;
 		printf("Assigning (%d, %d) with %f\n", height - x - 1, y, pDoublePrime[i]);
-		/*if (pDoublePrime[i] < 128)
-		{
-			pDoublePrime[i] = 0;
-		}
-		else
-		{
-			pDoublePrime[i] = 255;
-		}*/
-		// FOLLOWING THE RED CHANNEL TIP WAS BAD IDEA
-		// TOO LITTLE DIFFERENTIATION IN RED CHANNEL
+
 		// height - x - 1 instead of x bc it prints the original image upside down
 		final_img.set(0, height - x - 1, y, pDoublePrime[i]);
 		final_img.set(1, height - x - 1, y, pDoublePrime[i]);

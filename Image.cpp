@@ -42,6 +42,12 @@ void Image::set(unsigned int channel, unsigned int x, unsigned int y, unsigned c
 	*(this->data + (x * this->height + y) * this->num_channels + ((channel * sizeof(char)))) = val;
 }
 
+void Image::set(unsigned int x, unsigned int y, Matrix<unsigned char, 3, 1> vals)
+{
+	for(int i = 0; i < 3; i++)
+		this->set(i, x, y, vals(i));
+}
+
 /*
 char Image::operator[](unsigned int x, unsigned int y)
 {
