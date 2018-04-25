@@ -61,16 +61,16 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 
 	// decode the 1D vector back to an image
 	double min[3] = {INFINITY, INFINITY, INFINITY};
-	double max[3] = {-min, -min, -min};
+	double max[3] = {-min[0], -min[0], -min[0]};
 	for (int i = 0; i < pDoublePrimeR.size(); i++)
 	{
-		if (pDoublePrimeR[i] > max[1])
+		if (pDoublePrimeR[i] > max[0])
 		{
-			max = pDoublePrimeR[i];
+			max[0] = pDoublePrimeR[i];
 		}
-		if (pDoublePrimeR[i] < min[1])
+		if (pDoublePrimeR[i] < min[0])
 		{
-			min = pDoublePrimeR[i];
+			min[0] = pDoublePrimeR[i];
 		}
 
 		if (pDoublePrimeG[i] > max[1])

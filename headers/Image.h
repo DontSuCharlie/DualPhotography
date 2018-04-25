@@ -10,6 +10,7 @@ class Image
 public:
 	unsigned int getHeight();
 	unsigned int getWidth();
+	unsigned int getNumChannels();
 	unsigned char* getRaw();
 	unsigned char at(unsigned int channel, unsigned int x, unsigned int y);
 	void set(unsigned int channel, unsigned int x, unsigned int y, unsigned char val);

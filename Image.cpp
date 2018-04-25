@@ -9,6 +9,11 @@ unsigned int Image::getWidth()
 	return this->width;
 }
 
+unsigned int Image::getNumChannels()
+{
+	return this->num_channels;
+}
+
 unsigned char* Image::getRaw()
 {
 	return this->data;
