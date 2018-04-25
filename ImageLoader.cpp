@@ -1,6 +1,11 @@
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #endif
+
+#ifndef STB_IMAGE_WRITE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#endif
+
 #include "ImageLoader.h"
 #include <stdio.h>
 #ifdef DEBUG
@@ -35,3 +40,8 @@ Image loadImage(string file)
 // {
 
 // }
+
+void writeImage(Image image, string name)
+{
+	stbi_write_png(name.c_str(), image.getWidth(), image.getHeight(), image.getNumChannels(), image.getRaw(), 0);
+}

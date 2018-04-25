@@ -1,8 +1,3 @@
-// for compiling stb_image_write
-#ifndef STB_IMAGE_WRITE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#endif
-
 // for Microsoft Visual Studio for secure writes
 #ifndef MINGW
 	#define MINGW

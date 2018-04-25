@@ -1,5 +1,4 @@
 #pragma once
-#include "stb/stb_image_write.h"
 #include "Image.h"
 #include "ImageLoader.h"
 #include "Eigen/Dense"
