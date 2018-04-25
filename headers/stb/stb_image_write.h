@@ -857,7 +857,7 @@ unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_l
 
       if (bestloc) {
          // "lazy matching" - check match at *next* byte, and if it's better, do cur byte as literal
-         h = stbiw__zhash(data+i+1)&(stbiw__ZHASH-1);
+         h = stbiw__zhash((data+i+1))&(stbiw__ZHASH-1);
          hlist = hash_table[h];
          n = stbiw__sbcount(hlist);
          for (j=0; j < n; ++j) {

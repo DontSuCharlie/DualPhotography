@@ -9,13 +9,13 @@
 #include "DualPhotography.h"
 
 // row by row basis
-VectorXd DualPhotography::imageToCol(Image img)
+VectorXd DualPhotography::imageToCol(unsigned int channel, Image img)
 {
 	int len = img.getWidth() * img.getHeight();
 	VectorXd output(len);
 	for(int i = 0; i < len; i++)
 	{
-		output(i) = img.at(2, i % img.getWidth(), i / img.getWidth());
+		output(i) = img.at(channel, i % img.getWidth(), i / img.getWidth());
 		// printf("output(%d) = %f\n", i, output(i));
 	}
 	return output;
@@ -27,52 +27,79 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 	int num_imgs = images.size();
 	int width = projectorPattern.getWidth();
 	int height = projectorPattern.getHeight();
-	MatrixXd T_matrix(images[0].getWidth() * images[0].getHeight(), width * height); // the transport matrix
+	MatrixXd T_matrixR(images[1].getWidth() * images[1].getHeight(), width * height); // the transport matrix
+	MatrixXd T_matrixG(images[1].getWidth() * images[1].getHeight(), width * height); // the transport matrix
+	MatrixXd T_matrixB(images[1].getWidth() * images[1].getHeight(), width * height); // the transport matrix
 	for (int i = 0; i < num_imgs; i++)
 	{
-		T_matrix.col(i) = imageToCol(images[i]);
+		T_matrixR.col(i) = imageToCol(0, images[i]);
+		T_matrixG.col(i) = imageToCol(1, images[i]);
+		T_matrixB.col(i) = imageToCol(2, images[i]);
 	}
-	T_matrix.transposeInPlace();
+	T_matrixR.transposeInPlace();
+	T_matrixG.transposeInPlace();
+	T_matrixB.transposeInPlace();
 
-	int cam_dim = images[0].getWidth() * images[0].getHeight();
+	int cam_dim = images[1].getWidth() * images[1].getHeight();
 	VectorXd cDoublePrime(cam_dim); // the c'' vector
 	for (int i = 0; i < cam_dim; i++)
 	{
 		cDoublePrime(i) = 255.0f;
 	}
 
-	VectorXd pDoublePrime(width * height);// the p'' vector
-	pDoublePrime = T_matrix * cDoublePrime;
+	VectorXd pDoublePrimeR(width * height);// the p'' vector
+	VectorXd pDoublePrimeG(width * height);// the p'' vector
+	VectorXd pDoublePrimeB(width * height);// the p'' vector
+	pDoublePrimeR = T_matrixR * cDoublePrime;
+	pDoublePrimeG = T_matrixG * cDoublePrime;
+	pDoublePrimeB = T_matrixB * cDoublePrime;
 
 	// decode the 1D vector back to an image
-	double max = -INFINITY;
-	double min = -max;
-	for (int i = 0; i < pDoublePrime.size(); i++)
+	double min[3] = {INFINITY, INFINITY, INFINITY};
+	double max[3] = {-min[0], -min[0], -min[0]};
+	for (int i = 0; i < pDoublePrimeR.size(); i++)
 	{
-		if (pDoublePrime[i] > max)
+		if (pDoublePrimeR[i] > max[0])
 		{
-			max = pDoublePrime[i];
+			max[0] = pDoublePrimeR[i];
 		}
-		if (pDoublePrime[i] < min)
+		if (pDoublePrimeR[i] < min[0])
 		{
-			min = pDoublePrime[i];
+			min[0] = pDoublePrimeR[i];
+		}
+
+		if (pDoublePrimeG[i] > max[1])
+		{
+			max[1] = pDoublePrimeG[i];
+		}
+		if (pDoublePrimeG[i] < min[1])
+		{
+			min[1] = pDoublePrimeG[i];
+		}
+		
+		if (pDoublePrimeB[i] > max[2])
+		{
+			max[2] = pDoublePrimeB[i];
+		}
+		if (pDoublePrimeB[i] < min[2])
+		{
+			min[2] = pDoublePrimeB[i];
 		}
 	}
 
 	Image final_img(width, height, 3);
 
-	for (int i = 0; i < pDoublePrime.size(); i++)
+	for (int i = 0; i < pDoublePrimeR.size(); i++)
 	{
 		int x = i / height;
 		int y = i % height;
 		// the final_img.getWidth() is implicit, i.e. at the end, there should ONLY be w different values for x I think
-		pDoublePrime[i] = (pDoublePrime[i] - min) / (max - min) * 255.0f;
-		printf("Assigning (%d, %d) with %f\n", height - x - 1, y, pDoublePrime[i]);
+		pDoublePrimeR[i] = (pDoublePrimeR[i] - min[0]) / (max[0] - min[0]) * 255.0f;
+		pDoublePrimeG[i] = (pDoublePrimeG[i] - min[1]) / (max[1] - min[1]) * 255.0f;
+		pDoublePrimeB[i] = (pDoublePrimeB[i] - min[2]) / (max[2] - min[2]) * 255.0f;
 
-		// height - x - 1 instead of x bc it prints the original image upside down
-		final_img.set(0, height - x - 1, y, pDoublePrime[i]);
-		final_img.set(1, height - x - 1, y, pDoublePrime[i]);
-		final_img.set(2, height - x - 1, y, pDoublePrime[i]);
+		Matrix<unsigned char, 3, 1> color(pDoublePrimeR[i], pDoublePrimeG[i], pDoublePrimeB[i]);
+		final_img.set(height - x - 1, y, color);
 	}
 	return final_img;
 }

@@ -2,6 +2,9 @@
 #include <string>
 #include <vector>
 
+// for stb_image_write on Microsoft
+// #define STBI_MSC_SECURE_CRT
+
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"
 #include "Image.h"
@@ -26,5 +29,4 @@ numComponents = (if >0) forces the number of 8 bit components per pixel; if == 0
 
 Image loadImage(string file);
 // Image loadAllImages(string directory);
-
 void writeImage(Image image, string name);
