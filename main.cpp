@@ -94,6 +94,7 @@ int main(void)
 		// note to self: need to figure out how to deal with vector<Image> being able to assigned a const Image w/o a default constructor?
 	}
 	DualPhotography experim1;
+	experim1.generateProjectorPatterns("test", pair<int, int>(projectorRes, projectorRes));
 	Image orig1 = experim1.computeDualImage(samples, projectorPattern);
 	// render images
 	GLuint experim1Tex;

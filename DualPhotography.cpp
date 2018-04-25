@@ -21,6 +21,41 @@ VectorXd DualPhotography::imageToCol(unsigned int channel, Image img)
 	return output;
 }
 
+void DualPhotography::bigBrush(Image &img, pair<int, int> pos, pair<int, int> area, Matrix<unsigned char, 3, 1> color)
+{
+	for (int i = pos.first; i < pos.first + area.first; i++)
+	{
+		for (int j = pos.second; j < pos.second + area.second; j++)
+		{
+			img.set(i, j, color);
+		}
+	}
+}
+
+// currently implementing the brute force way
+void DualPhotography::generateProjectorPatterns(string file_base_name, pair<int, int> resolution)
+{
+	// hardcoding this for now
+	Image projectorPattern(3840, 2160, 3);
+	int block_size = 216;
+	// start at 216, end 216 away
+	Matrix<unsigned char, 3, 1> white(255, 255, 255);
+	Matrix<unsigned char, 3, 1> black(0, 0, 0);
+	int counter = 0;	
+	for(int i = 1056; i < 3840 - 1056; i+=block_size)
+	{
+		for(int j = 216; j < 2160 - 216; j+=block_size)
+		{
+			// set entire group to white
+			this->bigBrush(projectorPattern, pair<int, int>(i, j), pair<int, int>(block_size, block_size), white);
+			writeImage(projectorPattern, file_base_name + to_string(counter) + ".png");
+			++counter;
+			this->bigBrush(projectorPattern, pair<int, int>(i, j), pair<int, int>(block_size, block_size), black);
+		}
+	}
+}
+
+
 
 Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPattern)
 {
