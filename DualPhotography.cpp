@@ -23,25 +23,36 @@ VectorXd DualPhotography::imageToCol(unsigned int channel, Image img)
 
 void DualPhotography::bigBrush(Image &img, pair<int, int> pos, pair<int, int> area, Matrix<unsigned char, 3, 1> color)
 {
-	for (int i = pos.first; i < pos.first + area.first; i++)
+	int counter = 0;
+	for (int i = 0; i < 10; i++)
 	{
-		for (int j = pos.second; j < pos.second + area.second; j++)
+		for (int j = 0; j < 10; j++)
+		{
+			img.set(i, j, color);
+			writeImage(img, "projector-patterns/frames/a" + to_string(counter++) + ".png");
+		}
+	}
+	
+	printf("pos.first, pos.second = %d, %d\n", pos.first, pos.second);
+	/*for (int i = 0; i < 3840; i++)
+	{
+		for (int j = pos.second; j < 2160; j++)
 		{
 			img.set(i, j, color);
 		}
-	}
+	}*/
 }
 
 // currently implementing the brute force way
-void DualPhotography::generateProjectorPatterns(string file_base_name, pair<int, int> resolution)
+Image DualPhotography::generateProjectorPatterns(string file_base_name, pair<int, int> resolution)
 {
 	// hardcoding this for now
-	Image projectorPattern(3840, 2160, 3);
+	Image projectorPattern(1000, 500, 3);
 	int block_size = 216;
 	// start at 216, end 216 away
 	Matrix<unsigned char, 3, 1> white(255, 255, 255);
 	Matrix<unsigned char, 3, 1> black(0, 0, 0);
-	int counter = 0;	
+	int counter = 0;
 	for(int i = 1056; i < 3840 - 1056; i+=block_size)
 	{
 		for(int j = 216; j < 2160 - 216; j+=block_size)
@@ -50,9 +61,12 @@ void DualPhotography::generateProjectorPatterns(string file_base_name, pair<int,
 			this->bigBrush(projectorPattern, pair<int, int>(i, j), pair<int, int>(block_size, block_size), white);
 			writeImage(projectorPattern, file_base_name + to_string(counter) + ".png");
 			++counter;
-			this->bigBrush(projectorPattern, pair<int, int>(i, j), pair<int, int>(block_size, block_size), black);
+			// this->bigBrush(projectorPattern, pair<int, int>(i, j), pair<int, int>(block_size, block_size), black);
+			break;
 		}
+		break;
 	}
+	return projectorPattern;
 }
 
 

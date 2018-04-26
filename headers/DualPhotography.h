@@ -14,7 +14,8 @@ public:
 	// vector<Image> generateProjectorPatterns(Vector2d wantedRes, Vector2d projectorRes);
 	// creates the dual image (the image of the scene from the projector's point of view)
 	Image computeDualImage(vector<Image> images, Image projectorPattern);
-	void generateProjectorPatterns(string file_base_name, pair<int, int> resolution);
+	// set back to void when done
+	Image generateProjectorPatterns(string file_base_name, pair<int, int> resolution);
 private:
 	// load the sequence of images (e.g. "images0, images1, images2, ...")
 	// nomenclature is "images"
