@@ -94,7 +94,7 @@ int main(void)
 		// note to self: need to figure out how to deal with vector<Image> being able to assigned a const Image w/o a default constructor?
 	}
 	DualPhotography experim1;
-	Image test1 = experim1.generateProjectorPatterns("projector-patterns/testB", pair<int, int>(projectorRes, projectorRes));
+	Image test1 = experim1.generateProjectorPatterns("projector-patterns/testC", pair<int, int>(projectorRes, projectorRes));
 	Image orig1 = experim1.computeDualImage(samples, projectorPattern);
 	// render images
 	GLuint experim1Tex;
@@ -105,7 +105,7 @@ int main(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// glTextureParameteri(experim1Tex, GL_MIN)
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, test1.getWidth(), test1.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, test1.getRaw());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, orig1.getWidth(), orig1.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, orig1.getRaw());
 	// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, orig1.getWidth(), orig1.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, orig1.getRaw());
 	glGenerateMipmap(GL_TEXTURE_2D);
 

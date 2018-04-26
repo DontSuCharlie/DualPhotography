@@ -45,7 +45,6 @@ unsigned char Image::at(unsigned int channel, unsigned int x, unsigned int y)
 void Image::set(unsigned int channel, unsigned int x, unsigned int y, unsigned char val)
 {
 	*(this->data + (y * this->width + x) * this->num_channels + ((channel * sizeof(char)))) = val;
-	printf("input (%d, %d) gets %d\n", x, y, (this->data + (x * this->height + y) * this->num_channels + ((channel * sizeof(char)))));
 }
 
 void Image::set(unsigned int x, unsigned int y, Matrix<unsigned char, 3, 1> vals)
