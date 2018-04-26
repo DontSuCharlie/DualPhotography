@@ -74,6 +74,7 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 	int num_imgs = images.size();
 	int width = projectorPattern.getWidth();
 	int height = projectorPattern.getHeight();
+	printf("Defining transport matrix...\n");
 	MatrixXd T_matrixR(images[1].getWidth() * images[1].getHeight(), width * height); // the transport matrix
 	MatrixXd T_matrixG(images[1].getWidth() * images[1].getHeight(), width * height); // the transport matrix
 	MatrixXd T_matrixB(images[1].getWidth() * images[1].getHeight(), width * height); // the transport matrix
@@ -83,25 +84,30 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 		T_matrixG.col(i) = imageToCol(1, images[i]);
 		T_matrixB.col(i) = imageToCol(2, images[i]);
 	}
+	printf("Transposing the transport matrix...\n");
 	T_matrixR.transposeInPlace();
 	T_matrixG.transposeInPlace();
 	T_matrixB.transposeInPlace();
 
 	int cam_dim = images[1].getWidth() * images[1].getHeight();
 	VectorXd cDoublePrime(cam_dim); // the c'' vector
+	printf("Defining c'' vector...\n");
 	for (int i = 0; i < cam_dim; i++)
 	{
 		cDoublePrime(i) = 255.0f;
 	}
 
+	printf("Defining p'' vector...\n");
 	VectorXd pDoublePrimeR(width * height);// the p'' vector
 	VectorXd pDoublePrimeG(width * height);// the p'' vector
 	VectorXd pDoublePrimeB(width * height);// the p'' vector
+	printf("Multiplying T with c''...\n");
 	pDoublePrimeR = T_matrixR * cDoublePrime;
 	pDoublePrimeG = T_matrixG * cDoublePrime;
 	pDoublePrimeB = T_matrixB * cDoublePrime;
 
 	// decode the 1D vector back to an image
+	printf("Scaling the results...\n");
 	double min[3] = {INFINITY, INFINITY, INFINITY};
 	double max[3] = {-min[0], -min[0], -min[0]};
 	for (int i = 0; i < pDoublePrimeR.size(); i++)
@@ -135,7 +141,7 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 	}
 
 	Image final_img(width, height, 3);
-
+	printf("Creating image...\n");
 	for (int i = 0; i < pDoublePrimeR.size(); i++)
 	{
 		int x = i / height;
@@ -146,7 +152,7 @@ Image DualPhotography::computeDualImage(vector<Image> images, Image projectorPat
 		pDoublePrimeB[i] = (pDoublePrimeB[i] - min[2]) / (max[2] - min[2]) * 255.0f;
 
 		Matrix<unsigned char, 3, 1> color(pDoublePrimeR[i], pDoublePrimeG[i], pDoublePrimeB[i]);
-		final_img.set(height - x - 1, y, color);
+		final_img.set(x, height - y - 1, color);
 	}
 	return final_img;
 }

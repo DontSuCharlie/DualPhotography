@@ -18,8 +18,6 @@ Logger debug; // for printing to stdout and a log file at the same time
 
 #endif
 
-const int projectorRes = 4;
-
 int main(void)
 {
 	#ifdef DEBUG
@@ -74,6 +72,7 @@ int main(void)
 
 // testing Dual Photography
 	// create the projector pattern (aka all white)
+	const int projectorRes = 8;
 	Image projectorPattern(projectorRes, projectorRes, 1);
 	Matrix<unsigned char, 3, 1> white(255, 255, 255);
 	for(int i = 0; i < projectorRes; i++)
@@ -88,13 +87,18 @@ int main(void)
 	const int sampleBNum = 1366;
 	const int sampleCNum = 1383;
 	const int sampleDNum = 1406;
-	for(int i = 0; i < 16; i++)
+	const int sampleENum = 1544;
+	printf("Loading images...\n");
+	for(int i = 0; i < projectorRes * projectorRes; i++)
 	{
-		samples.push_back(loadImage("images/SampleD/IMAG" + to_string(sampleDNum + i) + ".jpg"));
+		samples.push_back(loadImage("images/SampleE/IMAG" + to_string(sampleENum + i) + ".jpg"));
+		printf("Loaded image %d out of %d\n", i, projectorRes * projectorRes);
 		// note to self: need to figure out how to deal with vector<Image> being able to assigned a const Image w/o a default constructor?
 	}
 	DualPhotography experim1;
-	Image test1 = experim1.generateProjectorPatterns("projector-patterns/testC", pair<int, int>(projectorRes, projectorRes));
+	// printf("Generating projector pattern\n");
+	// Image test1 = experim1.generateProjectorPatterns("projector-patterns/testC", pair<int, int>(projectorRes, projectorRes));
+	printf("Computing dual image...\n");
 	Image orig1 = experim1.computeDualImage(samples, projectorPattern);
 	// render images
 	GLuint experim1Tex;
